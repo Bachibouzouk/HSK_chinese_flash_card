@@ -5,20 +5,24 @@ Created on Sat Jan 23 12:27:18 2016
 @author: pfduc
 """
 
-from PyQt4.QtGui import QFont,QWidget, QVBoxLayout, QLabel,QApplication,QPushButton, QMessageBox
+from PyQt4.QtGui import QFont,QWidget, QVBoxLayout, QLabel,QApplication,QPushButton, QMessageBox, QFileDialog, QInputDialog
 from PyQt4.QtCore import SIGNAL
 import sys
+import os
 import numpy as np
 import csv
 
 #This are global variables used by HSKGui
-ASK_WORD = 1
-ASK_PRON = 2
-ASK_DEF = 3
-ASSESS = 4
+ASK_WORD = 2
+ASK_PRON = 3
+ASK_DEF = 4
+ASSESS = 5
 
 KNOWN_WORD = '1'
 UNKNOWN_WORD = '0'
+
+SCORE_ID="Score"
+WORD_ID="Word"
 
 class HSKGui(QWidget):
     """
@@ -29,19 +33,16 @@ class HSKGui(QWidget):
         
         super(HSKGui, self).__init__(parent) 
         
-        #a class responsible to browswe through a list of vocabulary
-        self.browser=FlashCardBrowser(fname)
-        #a variable to contain the word asked
-        self.current_word=None
-        #this variable value indicates at which stage of the question we are
-        self.question_stage=ASK_WORD
-        
-        
         #main layout of the form is the verticallayout        
         self.verticalLayout = QVBoxLayout()      
         self.verticalLayout.setObjectName("verticalLayout")
 
-        #labels which will be used to display the character, its prononciation and its definition
+        #labels which will be used to display the score, the character, its prononciation and its definition
+
+        self.headerLabel = QLabel (self)
+
+        self.scoreLabel = QLabel (self)        
+        
         self.charLabel = QLabel (self)
         newfont = QFont("Times", 30, QFont.Bold) 
         self.charLabel.setFont(newfont)
@@ -54,6 +55,8 @@ class HSKGui(QWidget):
         self.clear_fields()
         
         #adding the labels to thelayout
+        self.verticalLayout.addWidget(self.headerLabel)        
+        self.verticalLayout.addWidget(self.scoreLabel)
         self.verticalLayout.addWidget(self.charLabel)
         self.verticalLayout.addWidget(self.prononciationLabel)
         self.verticalLayout.addWidget(self.defLabel)
@@ -62,10 +65,11 @@ class HSKGui(QWidget):
         self.browseButton = QPushButton(parent = self)
         self.browseButton.setText("Pick a word")
         self.assessButton = QPushButton(parent = self)
+        self.assessButton.setText("Options...")
         
         self.verticalLayout.addWidget(self.browseButton)
         self.verticalLayout.addWidget(self.assessButton)
-        self.assessButton.setDisabled(True)
+#        self.assessButton.setDisabled(True)
   
         self.setLayout(self.verticalLayout)
                         
@@ -73,12 +77,37 @@ class HSKGui(QWidget):
         self.connect(self.browseButton,SIGNAL('clicked()'),self.on_browseButton_clicked)
         self.connect(self.assessButton,SIGNAL('clicked()'),self.on_assessButton_clicked)
 
+        self.load_voc_list(fname)
+        
+        #a variable to contain the word asked
+        self.current_word=None
+        #this variable value indicates at which stage of the question we are
+        self.question_stage=ASK_WORD
+        #these are the options availiable
+        self.option_list={"Reset the known voc" : None,"Load another list" : self.load_voc_list}
 
+    def load_voc_list(self,fname = None):
+        """comment"""
+        if fname == None:
+            fname = str(QFileDialog.getOpenFileName(self, 'Load vocabulary list as', './'))
+            
+        if not fname == None:
+            #a class responsible to browswe through a list of vocabulary
+            self.browser=FlashCardBrowser(fname)
+            #update the score
+            prev_score=self.browser.calculate_score()        
+            self.change_score(*prev_score)
+            
+            #change the label of the header according to the filename
+            self.headerLabel.setText(self.browser.get_fname())
+            
+        
+        
     def closeEvent(self, event): 
         """when exiting the widget we are prompt with this question"""
         
         reply = QMessageBox.question(self, 'Message',"Do you want to save your learning?", QMessageBox.Yes, QMessageBox.No)
-    
+        
         if reply == QMessageBox.Yes:
             #save the learning of the words
             self.browser.save_voc_list("HSK_Level_5.txt")
@@ -101,6 +130,7 @@ class HSKGui(QWidget):
             
             #picks a new word and displays only the character
             self.current_word = self.browser.word_picking()
+            print ASK_WORD
             self.charLabel.setText(u"%s"%(self.current_word[ASK_WORD]))
             
             #prepares the button to display the prononciation upon next click
@@ -121,43 +151,67 @@ class HSKGui(QWidget):
             
             #prepares the buttons to ask the users whether they know the character or not
             self.browseButton.setText("Know")            
-            self.assessButton.setDisabled(False)
+#            self.assessButton.setDisabled(False)
             self.assessButton.setText("Don't Know")
             self.question_stage = ASSESS
             
         elif self.question_stage == ASSESS:
             #the user clicked on "Know", so we update the score of the word in the voc list
             self.current_word[-1] = KNOWN_WORD            
-            self.browser.word_learning(self.current_word)
+            new_score=self.browser.word_learning(self.current_word)
+            self.change_score(*new_score)
             
+            #prepares the buttons to ask the users to pick a new word
+            self.browseButton.setText("Pick a word")
+            self.assessButton.setText("Options...")
+#            self.assessButton.setDisabled(True)
+            self.question_stage = ASK_WORD
+        
+    #1294
+            
+    def on_assessButton_clicked(self):
+        """the user clicked on "Don't know" button so we do nothing with this word"""
+        if self.question_stage == ASSESS:
             #prepares the buttons to ask the users to pick a new word
             self.browseButton.setText("Pick a word")
             self.assessButton.setText("")
             self.assessButton.setDisabled(True)
             self.question_stage = ASK_WORD
-            
-            
-    def on_assessButton_clicked(self):
-        """the user clicked on "Don't know" button so we do nothing with this word"""
-        
-        #prepares the buttons to ask the users to pick a new word
-        self.browseButton.setText("Pick a word")
-        self.assessButton.setText("")
-        self.assessButton.setDisabled(True)
-        self.question_stage = ASK_WORD
+        else:
+            #this button is then used as an option menu trigger
+            item,ok = QInputDialog.getItem(self, self.trUtf8("Options"), 
+                       self.trUtf8("Choose an option"),
+                       self.option_list.keys());
+
+            if ok:
+                #execute the option from the list
+                self.option_list[str(item)]()
+                
+    def change_score(self,known_num,tot_num):
+        """update the label with the score"""
+        self.scoreLabel.setText("Known words : %i/%i"%(known_num,tot_num))
         
 
 class FlashCardBrowser(object):
     """this class takes care of managing the flash cards and browsing through them"""
     def __init__(self,fname = None):
         if not fname == None :
-            self.voc_list = self.import_voc_list(fname)
             self.fname = fname
         else:
-            self.voc_list = self.import_voc_list()
+            self.fname='HSK_Level_5.txt'
             
-            
-    def import_voc_list(self,fname='HSK_Level_5.csv'):
+        self.voc_list = self.import_voc_list(self.fname)
+        
+        
+    def get_fname(self):
+        """formatsthe fname for display"""
+        
+        fname = os.path.basename(self.fname)[:-4]
+        fname = fname.replace('_',' ')
+        return fname
+        
+        
+    def import_voc_list(self,fname='HSK_Level_5.txt'):
         """ 
         this function loads the vocabulary list from a given csv file
         it expects the following format from the file : 'Order','HSK Level-Order','Word','Pronunciation','Definition','score'
@@ -167,9 +221,11 @@ class FlashCardBrowser(object):
         with open(fname, 'rb') as csvfile:
             reader = csv.reader(csvfile, delimiter=',')
             for row in reader:
-                #get rid of the HSK level order as I am not using it
-                row.pop(1)
                 hsk_data.append(row)
+        
+        #finds the column number corresponding to the score
+        self.index_score=hsk_data[0].index(SCORE_ID)
+        
         return np.array(hsk_data)            
         
     def save_voc_list(self,fname = None):
@@ -186,7 +242,7 @@ class FlashCardBrowser(object):
         """ this function chooses a word with a score of 0 from the word list"""   
         
         #choose only from the words which have a 0 in the score column (i.e. unknowns)
-        unknown_words = self.voc_list[self.voc_list[:,4] == '0',:]
+        unknown_words = self.voc_list[self.voc_list[:,self.index_score] == UNKNOWN_WORD,:]
         #pick a random integer between 0 and the size of the unknows list
         index_picked = np.random.random_integers(0,len(unknown_words)-1)
         
@@ -198,13 +254,22 @@ class FlashCardBrowser(object):
         return word
         
     def word_learning(self,word):
-        """this function recieve a word after its interaction with the user and updates its score in the vocabulary list"""
+        """this function recieves a word after its interaction with the user and updates its score in the vocabulary list"""
         self.voc_list[self.voc_list[:,0] == word[0],:] = word
+        return self.calculate_score()
+      
+    def calculate_score(self):
+        """this function computes the total score and number of known words"""
+
+        unknown_words_num = len(self.voc_list[self.voc_list[:,self.index_score] == UNKNOWN_WORD,:])
+        known_words_num = len(self.voc_list[self.voc_list[:,self.index_score] == KNOWN_WORD,:])
+
+        total_words_num = known_words_num + unknown_words_num 
+        return known_words_num, total_words_num
         
-       
 if __name__=="__main__":
     
     app = QApplication(sys.argv)
-    ex = HSKGui()
+    ex = HSKGui(fname="HSK_Level_5.csv")
     ex.show()
     sys.exit(app.exec_())
