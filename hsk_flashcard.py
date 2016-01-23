@@ -5,7 +5,7 @@ Created on Sat Jan 23 12:27:18 2016
 @author: pfduc
 """
 
-from PyQt4.QtGui import QFont,QWidget, QVBoxLayout, QLabel,QApplication,QPushButton, QMessageBox, QFileDialog, QInputDialog
+from PyQt4.QtGui import QFont,QWidget, QVBoxLayout,QHBoxLayout , QLabel,QApplication,QPushButton, QMessageBox, QFileDialog, QInputDialog
 from PyQt4.QtCore import SIGNAL
 import sys
 import os
@@ -37,11 +37,22 @@ class HSKGui(QWidget):
         self.verticalLayout = QVBoxLayout()      
         self.verticalLayout.setObjectName("verticalLayout")
 
+        #main layout of the form is the verticallayout        
+        self.horizontalLayout = QHBoxLayout()      
+        self.horizontalLayout.setObjectName("horizontalLayout")
+
         #labels which will be used to display the score, the character, its prononciation and its definition
 
         self.headerLabel = QLabel (self)
 
         self.scoreLabel = QLabel (self)        
+        
+        self.numwordLabel =QLabel (self)     
+        self.numwordLabel.setText("#Words : 0")
+        
+        self.horizontalLayout.addWidget(self.headerLabel)
+        self.horizontalLayout.addWidget(self.scoreLabel)   
+        self.horizontalLayout.addWidget(self.numwordLabel)
         
         self.charLabel = QLabel (self)
         newfont = QFont("Times", 30, QFont.Bold) 
@@ -55,21 +66,19 @@ class HSKGui(QWidget):
         self.clear_fields()
         
         #adding the labels to thelayout
-        self.verticalLayout.addWidget(self.headerLabel)        
-        self.verticalLayout.addWidget(self.scoreLabel)
+        self.verticalLayout.addLayout(self.horizontalLayout)
         self.verticalLayout.addWidget(self.charLabel)
         self.verticalLayout.addWidget(self.prononciationLabel)
         self.verticalLayout.addWidget(self.defLabel)
         
         #button to interact with the user
         self.browseButton = QPushButton(parent = self)
-        self.browseButton.setText("Pick a word")
+        self.browseButton.setText("Start")
         self.assessButton = QPushButton(parent = self)
         self.assessButton.setText("Options...")
         
         self.verticalLayout.addWidget(self.browseButton)
         self.verticalLayout.addWidget(self.assessButton)
-#        self.assessButton.setDisabled(True)
   
         self.setLayout(self.verticalLayout)
                         
@@ -80,11 +89,13 @@ class HSKGui(QWidget):
         self.load_voc_list(fname)
         
         #a variable to contain the word asked
-        self.current_word=None
+        self.current_word = None
         #this variable value indicates at which stage of the question we are
-        self.question_stage=ASK_WORD
+        self.question_stage = ASK_WORD
         #these are the options availiable
-        self.option_list={"Reset the known voc" : None,"Load another list" : self.load_voc_list}
+        self.option_list = {"Credits(disabled)" : None,"Read the help(disabled)" : None,"Reset the known voc(disabled)" : None,"Load another list" : self.load_voc_list}
+        #this is the number of word one went through during one session
+        self.numword = 0
 
     def load_voc_list(self,fname = None):
         """comment"""
@@ -101,6 +112,13 @@ class HSKGui(QWidget):
             #change the label of the header according to the filename
             self.headerLabel.setText(self.browser.get_fname())
             
+            #resets the number of words done during the session
+            self.numword = 0
+            
+    def increment_numword(self):
+        """increment the number of words browsed"""
+        self.numword = self.numword + 1
+        self.numwordLabel.setText("#Words : %i"%(self.numword))
         
         
     def closeEvent(self, event): 
@@ -110,7 +128,11 @@ class HSKGui(QWidget):
         
         if reply == QMessageBox.Yes:
             #save the learning of the words
-            self.browser.save_voc_list("HSK_Level_5.txt")
+            fname = str(QFileDialog.getSaveFileName(self, 'Save as', './'))
+            if fname:
+                self.browser.save_voc_list(fname)
+            else:
+                self.browser.save_voc_list("Flash_card_backup.csv")
         
         event.accept()
 
@@ -130,7 +152,6 @@ class HSKGui(QWidget):
             
             #picks a new word and displays only the character
             self.current_word = self.browser.word_picking()
-            print ASK_WORD
             self.charLabel.setText(u"%s"%(self.current_word[ASK_WORD]))
             
             #prepares the button to display the prononciation upon next click
@@ -151,7 +172,6 @@ class HSKGui(QWidget):
             
             #prepares the buttons to ask the users whether they know the character or not
             self.browseButton.setText("Know")            
-#            self.assessButton.setDisabled(False)
             self.assessButton.setText("Don't Know")
             self.question_stage = ASSESS
             
@@ -162,10 +182,11 @@ class HSKGui(QWidget):
             self.change_score(*new_score)
             
             #prepares the buttons to ask the users to pick a new word
-            self.browseButton.setText("Pick a word")
+            self.browseButton.setText("Pick another word")
             self.assessButton.setText("Options...")
-#            self.assessButton.setDisabled(True)
             self.question_stage = ASK_WORD
+            
+            self.increment_numword()
         
     #1294
             
@@ -174,9 +195,10 @@ class HSKGui(QWidget):
         if self.question_stage == ASSESS:
             #prepares the buttons to ask the users to pick a new word
             self.browseButton.setText("Pick a word")
-            self.assessButton.setText("")
-            self.assessButton.setDisabled(True)
+            self.assessButton.setText("Options...")
             self.question_stage = ASK_WORD
+            
+            self.increment_numword()
         else:
             #this button is then used as an option menu trigger
             item,ok = QInputDialog.getItem(self, self.trUtf8("Options"), 
