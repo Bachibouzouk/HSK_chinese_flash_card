@@ -5,7 +5,7 @@ Created on Sat Jan 23 12:27:18 2016
 @author: pfduc
 """
 
-from PyQt4.QtGui import QFont,QWidget, QVBoxLayout,QHBoxLayout , QLabel,QApplication,QPushButton, QMessageBox, QFileDialog, QInputDialog
+from PyQt4.QtGui import QFont,QWidget,QLineEdit, QVBoxLayout,QHBoxLayout , QLabel,QApplication,QPushButton, QMessageBox, QFileDialog, QInputDialog
 from PyQt4.QtCore import SIGNAL
 import sys
 import os
@@ -55,13 +55,14 @@ class HSKGui(QWidget):
         self.horizontalLayout.addWidget(self.numwordLabel)
         
         self.charLabel = QLabel (self)
-        newfont = QFont("Times", 30, QFont.Bold) 
-        self.charLabel.setFont(newfont)
+        self.charLabel.setFont(QFont("Helvetica",45))
         
         self.prononciationLabel = QLabel (self)
-        
+        self.prononciationLabel.setFont(QFont("Helvetica",20))
+                
         self.defLabel = QLabel (self)
-
+        self.defLabel.setFont(QFont("Helvetica",15))
+        self.defLabel.setWordWrap(True)
         #sets all labels to empty strings
         self.clear_fields()
         
@@ -171,15 +172,12 @@ class HSKGui(QWidget):
             self.defLabel.setText(u"%s"%(self.current_word[ASK_DEF]))
             
             #prepares the buttons to ask the users whether they know the character or not
-            self.browseButton.setText("Know")            
-            self.assessButton.setText("Don't Know")
+            self.browseButton.setText("Don't Know")            
+            self.assessButton.setText("Know")
             self.question_stage = ASSESS
             
         elif self.question_stage == ASSESS:
-            #the user clicked on "Know", so we update the score of the word in the voc list
-            self.current_word[-1] = KNOWN_WORD            
-            new_score=self.browser.word_learning(self.current_word)
-            self.change_score(*new_score)
+            #The user clicked on "Don't Know"
             
             #prepares the buttons to ask the users to pick a new word
             self.browseButton.setText("Pick another word")
@@ -191,10 +189,15 @@ class HSKGui(QWidget):
     #1294
             
     def on_assessButton_clicked(self):
-        """the user clicked on "Don't know" button so we do nothing with this word"""
+        """the button is alternatively "Know" or "Options..." """
         if self.question_stage == ASSESS:
+            #the user clicked on "Know", so we update the score of the word in the voc list
+            self.current_word[-1] = KNOWN_WORD            
+            new_score=self.browser.word_learning(self.current_word)
+            self.change_score(*new_score)
+            
             #prepares the buttons to ask the users to pick a new word
-            self.browseButton.setText("Pick a word")
+            self.browseButton.setText("Pick another word")
             self.assessButton.setText("Options...")
             self.question_stage = ASK_WORD
             
@@ -223,6 +226,8 @@ class FlashCardBrowser(object):
             self.fname='HSK_Level_5.txt'
             
         self.voc_list = self.import_voc_list(self.fname)
+
+
         
         
     def get_fname(self):
@@ -292,6 +297,6 @@ class FlashCardBrowser(object):
 if __name__=="__main__":
     
     app = QApplication(sys.argv)
-    ex = HSKGui(fname="HSK_Level_5.csv")
+    ex = HSKGui(fname="HSK_Level_5_PF.csv")
     ex.show()
     sys.exit(app.exec_())
