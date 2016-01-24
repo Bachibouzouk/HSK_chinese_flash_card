@@ -94,12 +94,12 @@ class HSKGui(QWidget):
         #this variable value indicates at which stage of the question we are
         self.question_stage = ASK_WORD
         #these are the options availiable
-        self.option_list = {"Credits(disabled)" : None,"Read the help(disabled)" : None,"Reset the known voc(disabled)" : None,"Load another list" : self.load_voc_list}
+        self.option_list = {"Credits(disabled)" : None,"Read the help(disabled)" : None,"Reset the known voc" : self.reset_voc_list,"Load another list" : self.load_voc_list}
         #this is the number of word one went through during one session
         self.numword = 0
 
     def load_voc_list(self,fname = None):
-        """comment"""
+        """loads a vocabulary list from a user choosen location"""
         if fname == None:
             fname = str(QFileDialog.getOpenFileName(self, 'Load vocabulary list as', './'))
             
@@ -115,6 +115,16 @@ class HSKGui(QWidget):
             
             #resets the number of words done during the session
             self.numword = 0
+            
+    def reset_voc_list(self):
+        """resets the number of known words to 0"""
+        reply = QMessageBox.question(self, 'Message',"Do you want to reset your learning?", QMessageBox.Yes, QMessageBox.No)
+        
+        if reply == QMessageBox.Yes:
+            self.browser.reset_word_learned()
+            #update the score
+            prev_score=self.browser.calculate_score()        
+            self.change_score(*prev_score)
             
     def increment_numword(self):
         """increment the number of words browsed"""
@@ -216,6 +226,7 @@ class HSKGui(QWidget):
         """update the label with the score"""
         self.scoreLabel.setText("Known words : %i/%i"%(known_num,tot_num))
         
+        
 
 class FlashCardBrowser(object):
     """this class takes care of managing the flash cards and browsing through them"""
@@ -228,8 +239,6 @@ class FlashCardBrowser(object):
         self.voc_list = self.import_voc_list(self.fname)
 
 
-        
-        
     def get_fname(self):
         """formatsthe fname for display"""
         
@@ -284,6 +293,11 @@ class FlashCardBrowser(object):
         """this function recieves a word after its interaction with the user and updates its score in the vocabulary list"""
         self.voc_list[self.voc_list[:,0] == word[0],:] = word
         return self.calculate_score()
+        
+    def reset_word_learned(self):
+        """this function sets back all the scores to UNKNOWN_WORD"""
+        for i in range(len(self.voc_list)-1):
+            self.voc_list[i+1,self.index_score] = UNKNOWN_WORD
       
     def calculate_score(self):
         """this function computes the total score and number of known words"""
@@ -297,6 +311,6 @@ class FlashCardBrowser(object):
 if __name__=="__main__":
     
     app = QApplication(sys.argv)
-    ex = HSKGui(fname="HSK_Level_5_PF.csv")
+    ex = HSKGui(fname="HSK_Level_5.csv")
     ex.show()
     sys.exit(app.exec_())
