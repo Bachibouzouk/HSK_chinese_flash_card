@@ -2,6 +2,12 @@
 """
 Created on Sat Jan 23 12:27:18 2016
 
+IMPROVEMENT :
+Give the possibility to the user to say if they like a new word (like a short term objective to learn)
+Then give the user possibilities to browse HSK * words only (without including all the lower HSK words)
+Or browse only the liked words
+
+give the possibility to save the learned words during the session
 @author: pfduc
 """
 
@@ -94,7 +100,7 @@ class HSKGui(QWidget):
         #this variable value indicates at which stage of the question we are
         self.question_stage = ASK_WORD
         #these are the options availiable
-        self.option_list = {"Credits(disabled)" : None,"Read the help(disabled)" : None,"Reset the known voc" : self.reset_voc_list,"Load another list" : self.load_voc_list}
+        self.option_list = {"Save current session" : self.save_learning, "Credits(disabled)" : None,"Read the help(disabled)" : None,"Reset the known voc" : self.reset_voc_list,"Load another list" : self.load_voc_list}
         #this is the number of word one went through during one session
         self.numword = 0
 
@@ -139,11 +145,7 @@ class HSKGui(QWidget):
         
         if reply == QMessageBox.Yes:
             #save the learning of the words
-            fname = str(QFileDialog.getSaveFileName(self, 'Save as', './'))
-            if fname:
-                self.browser.save_voc_list(fname)
-            else:
-                self.browser.save_voc_list("Flash_card_backup.csv")
+            self.save_learning()
         
         event.accept()
 
@@ -226,8 +228,16 @@ class HSKGui(QWidget):
         """update the label with the score"""
         self.scoreLabel.setText("Known words : %i/%i"%(known_num,tot_num))
         
+    def save_learning(self):
+        """prompt the user to save the current session in a file"""
         
-
+        fname = str(QFileDialog.getSaveFileName(self, 'Save as', './%s'%(os.path.basename(self.browser.fname)),"*.csv"))
+        if fname:
+            
+            self.browser.save_voc_list(fname)
+        else:
+            self.browser.save_voc_list("Flash_card_backup.csv")
+        
 class FlashCardBrowser(object):
     """this class takes care of managing the flash cards and browsing through them"""
     def __init__(self,fname = None):
