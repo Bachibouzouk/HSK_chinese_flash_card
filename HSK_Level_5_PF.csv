@@ -165,7 +165,7 @@ Order,HSK Level-Order,Word,Pronunciation,Definition,Score
 163,5-163,操心,cao1 xin1,to worry about,0
 164,3-46,草,cao3,"grass; straw; manuscript; draft (of a document); careless; rough; CL:棵[ke1],撮[zuo3],株[zhu1],根[gen1]",0
 165,5-165,册,ce4,book; booklet; classifier for books,0
-166,5-166,厕所,ce4 suo3,"toilet; lavatory; CL:間|间[jian1],處|处[chu4]",0
+166,5-166,厕所,ce4 suo3,"toilet; lavatory; CL:間|间[jian1],處|处[chu4]",1
 167,5-167,测验,ce4 yan4,"test; to test; CL:次[ci4],個|个[ge4]",0
 168,3-47,层,ceng2,layer; stratum; laminated; floor (of a building); storey; classifier for layers; repeated; sheaf (math.),0
 169,5-169,曾经,ceng2 jing1,once; already; former; previously; ever; (past tense marker used before verb or clause),0
@@ -788,7 +788,7 @@ Order,HSK Level-Order,Word,Pronunciation,Definition,Score
 783,5-783,华裔,hua2 yi4,ethnic Chinese; non-Chinese citizen of Chinese ancestry,0
 784,3-183,画,hua4,"to draw; picture; painting; CL:幅[fu2],張|张[zhang1]",0
 785,5-785,话题,hua4 ti2,subject (of a talk or conversation); topic,0
-786,5-786,化学,hua4 xue2,chemistry; chemical,0
+786,5-786,化学,hua4 xue2,chemistry; chemical,1
 787,5-787,怀念,huai2 nian4,to cherish the memory of; to think of; reminisce,0
 788,4-365,怀疑,huai2 yi2,to doubt; to suspect; doubt; suspicion; skeptical,0
 789,3-184,坏,huai4,bad; spoiled; broken; to break down,0
@@ -845,7 +845,6 @@ Order,HSK Level-Order,Word,Pronunciation,Definition,Score
 840,4-393,集合,ji2 he2,a congregation; to gather; a set,0
 841,5-841,集体,ji2 ti3,collective; social; team; CL:個|个[ge4],0
 842,5-842,集中,ji2 zhong1,to concentrate; to centralize; to focus; centralized; concentrated; to put together,0
-843,5-839,急忙,ji2 mang2,hastily,0
 844,4-395,即使,ji2 shi3,even if; even though; given that,0
 845,1-44,几,ji3,how much; how many; several; a few,0
 846,4-397,寄,ji4,to live (in a house); to lodge; to mail; to send; to entrust; to depend,0
@@ -1059,7 +1058,7 @@ Order,HSK Level-Order,Word,Pronunciation,Definition,Score
 1054,4-491,科学,ke1 xue2,"science; scientific knowledge; scientific; CL:門|门[men2],個|个[ge4],種|种[zhong3]",0
 1055,4-492,咳嗽,ke2 sou5,to cough; CL:陣|阵[zhen4],0
 1056,3-246,渴,ke3,thirsty,0
-1057,3-247,可爱,ke3 ai4,amiable; cute; lovely,0
+1057,3-247,可爱,ke3 ai4,amiable; cute; lovely,1
 1058,5-1058,可见,ke3 jian4,it can clearly be seen (that this is the case); it is (thus) clear; clear; visible,0
 1059,5-1059,可靠,ke3 kao4,reliable,0
 1060,4-495,可怜,ke3 lian2,pitiful; pathetic,0
@@ -1142,7 +1141,7 @@ Order,HSK Level-Order,Word,Pronunciation,Definition,Score
 1137,1-57,里,li3,lining; interior; inside; internal; also written 裡|里 [li3],0
 1138,5-1138,礼拜天,li3 bai4 tian1,Sunday,0
 1139,4-542,礼貌,li3 mao4,courtesy; manners,0
-1140,3-271,礼物,li3 wu4,"gift; present; CL:件[jian4],個|个[ge4],份[fen4]",0
+1140,3-271,礼物,li3 wu4,"gift; present; CL:件[jian4],個|个[ge4],份[fen4]",1
 1141,4-539,理发,li3 fa4,a barber; hairdressing,0
 1142,4-540,理解,li3 jie3,to comprehend; to understand; comprehension; understanding,0
 1143,5-1143,理论,li3 lun4,theory; CL:個|个[ge4],0
@@ -1161,7 +1160,7 @@ Order,HSK Level-Order,Word,Pronunciation,Definition,Score
 1156,5-1156,利益,li4 yi4,benefit; (in sb's) interest; CL:個|个[ge4],0
 1157,5-1157,利用,li4 yong4,exploit; make use of; to use; to take advantage of; to utilize,0
 1158,3-272,历史,li4 shi3,"history; CL:門|门[men2],段[duan4]",0
-1159,4-548,俩,lia3,two (colloquial equivalent of 兩個|两个); both; some,0
+1159,4-548,俩,lia3,two (colloquial equivalent of 兩個|两个); both; some,1
 1160,4-549,连,lian2,"to link; to join; to connect; continuously; in succession; including; (used with 也, 都 etc) even; company (military)",0
 1161,5-1161,连忙,lian2 mang2,promptly; at once,0
 1162,5-1162,连续剧,lian2 xu4 ju4,serialized drama; dramatic series; show in parts,0
@@ -1198,7 +1197,7 @@ Order,HSK Level-Order,Word,Pronunciation,Definition,Score
 1193,4-566,流行,liu2 xing2,to spread; to rage (of contagious disease); popular; fashionable; prevalent; (math.) manifold,0
 1194,5-1194,浏览,liu2 lan3,to skim over; to browse,0
 1195,1-59,六,liu4,six; 6,0
-1196,5-1196,龙,long2,dragon; CL:條|条[tiao2]; imperial,0
+1196,5-1196,龙,long2,dragon; CL:條|条[tiao2]; imperial,1
 1197,3-281,楼,lou2,"house with more than 1 story; storied building; floor; CL:層|层[ceng2],座[zuo4],棟|栋[dong4]",0
 1198,5-1198,漏,lou4,to leak; to divulge; to leave out by mistake; waterclock or hourglass (old),0
 1199,2-126,路,lu4,road; path; way; CL:條|条[tiao2],0
@@ -1294,7 +1293,7 @@ Order,HSK Level-Order,Word,Pronunciation,Definition,Score
 1289,4-607,目的,mu4 di4,purpose; aim; goal; target; objective; CL:個|个[ge4],0
 1290,5-1290,目录,mu4 lu4,catalog; table of contents; directory (on computer hard drive); list; contents,0
 1291,5-1291,目前,mu4 qian2,at the present time; currently,0
-1292,5-1292,木头,mu4 tou5,"slow-witted; blockhead; log (of wood, timber etc); CL:塊|块[kuai4],根[gen1]",0
+1292,5-1292,木头,mu4 tou5,"slow-witted; blockhead; log (of wood, timber etc); CL:塊|块[kuai4],根[gen1]",1
 1293,3-308,拿,na2,to hold; to seize; to catch; to apprehend; to take,0
 1294,1-69,哪(儿),na3(r5),how; which (where?; wherever; anywhere),0
 1295,5-1295,哪怕,na3 pa4,even; even if; even though; no matter how,0
@@ -1350,7 +1349,7 @@ Order,HSK Level-Order,Word,Pronunciation,Definition,Score
 1345,4-640,排列,pai2 lie4,array; arrangement; permutation (i.e. ordered choice of n elements out of m),0
 1346,5-1346,排球,pai2 qiu2,volleyball; CL:個|个[ge4],0
 1347,5-1347,派,pai4,clique; school; group; faction; to dispatch; to send; to assign; to appoint; pi (Greek letter Ππ); the circular ratio pi = 3.1415926,0
-1348,3-329,盘子,pan2 zi5,tray; plate; dish; CL:個|个[ge4],0
+1348,3-329,盘子,pan2 zi5,tray; plate; dish; CL:個|个[ge4],1
 1349,4-642,判断,pan4 duan4,to decide; to determine; CL:個|个[ge4],0
 1350,5-1350,盼望,pan4 wang4,to hope for; look forward to,0
 1351,2-154,旁边,pang2 bian1,lateral; side; to the side; beside,0
@@ -1656,7 +1655,7 @@ Order,HSK Level-Order,Word,Pronunciation,Definition,Score
 1650,5-1650,士兵,shi4 bing1,soldier; CL:個|个[ge4],0
 1651,4-775,市场,shi4 chang3,market place; market (also in abstract); abbr. for 超級市場|超级市场 supermarket; CL:個|个[ge4],0
 1652,5-1652,似的,shi4 de5 ,seems as if; rather like;,0
-1653,4-776,适合,shi4 he2,to fit; to suit,0
+1653,4-776,适合,shi4 he2,to fit; to suit,1
 1654,4-777,适应,shi4 ying4,to suit; to fit; to be suitable; to adapt; to get used to sth,0
 1655,4-778,世纪,shi4 ji4,century; CL:個|个[ge4],0
 1656,3-390,世界,shi4 jie4,world; CL:個|个[ge4],0
@@ -1983,7 +1982,7 @@ Order,HSK Level-Order,Word,Pronunciation,Definition,Score
 1976,4-936,相反,xiang1 fan3,opposite; contrary,0
 1977,5-1977,相关,xiang1 guan1,interrelated; correlation; dependence; relevance; mutuality,0
 1978,5-1978,相似,xiang1 si4,to resemble; similar; like; resemblance; similarity,0
-1979,3-472,相同,xiang1 tong2,identical; same,0
+1979,3-472,相同,xiang1 tong2,identical; same,1
 1980,3-473,相信,xiang1 xin4,be convinced (that something is true); believe; to accept sth as true,0
 1981,4-939,详细,xiang2 xi4,detailed; in detail; minute,0
 1982,4-940,响,xiang3,to make a sound; to sound; to ring; loud; classifier for noises,0
@@ -2029,7 +2028,7 @@ Order,HSK Level-Order,Word,Pronunciation,Definition,Score
 2022,1-125,写,xie3,to write,0
 2023,1-126,谢谢,xie4 xie5,to thank; thanks,0
 2024,2-242,新,xin1,new; newly; meso- (chemistry),0
-2025,3-488,新闻,xin1 wen2,"news; CL:條|条[tiao2],個|个[ge4]",0
+2025,3-488,新闻,xin1 wen2,"news; CL:條|条[tiao2],個|个[ge4]",1
 2026,3-489,新鲜,xin1 xian1,"fresh (experience, food etc); freshness",0
 2027,4-961,辛苦,xin1 ku3,hard; exhausting; with much toil; thanks for your trouble,0
 2028,5-2028,心理,xin1 li3,mental; psychological,0
@@ -2045,7 +2044,7 @@ Order,HSK Level-Order,Word,Pronunciation,Definition,Score
 2038,4-966,信用卡,xin4 yong4 ka3,credit card,0
 2039,4-967,兴奋,xing1 fen4,excited; excitement,0
 2040,1-127,星期,xing1 qi1,week; CL:個|个[ge4],0
-2041,4-969,行,xing2,to walk; to go; to travel; a visit; temporary; makeshift; current; in circulation; to do; to perform; capable; competent; effective; all right; OK!; will do,0
+2041,4-969,行,xing2,to walk; to go; to travel; a visit; temporary; makeshift; current; in circulation; to do; to perform; capable; competent; effective; all right; OK!; will do,1
 2042,5-2042,行动,xing2 dong4,operation; action; to move; mobile; CL:個|个[ge4],0
 2043,3-492,行李箱,xing2 li5 xiang1,suitcase,0
 2044,5-2044,行人,xing2 ren2,pedestrian; traveler on foot; passer-by; official responsible for arranging audiences with the emperor,0
@@ -2167,7 +2166,7 @@ Order,HSK Level-Order,Word,Pronunciation,Definition,Score
 2158,4-1030,亿,yi4,a hundred million; calculate,0
 2159,3-525,一般,yi4 ban1,same; ordinary; common; general; generally; in general,0
 2160,3-526,一边,yi4 bian1,one side; either side; on the one hand; on the other hand; doing while,0
-2161,2-262,一起,yi4 qi3,in the same place; together; with; altogether (in total),0
+2161,2-262,一起,yi4 qi3,in the same place; together; with; altogether (in total),1
 2162,3-528,一直,yi4 zhi2,straight (in a straight line); continuously; always; from the beginning of ... up to ...; all along,0
 2163,4-1035,意见,yi4 jian4,"idea; opinion; suggestion; objection; complaint; CL:點|点[dian3],條|条[tiao2]",0
 2164,2-263,意思,yi4 si5,idea; opinion; meaning; wish; desire; CL:個|个[ge4],0
@@ -2278,7 +2277,7 @@ Order,HSK Level-Order,Word,Pronunciation,Definition,Score
 2268,5-2268,运用,yun4 yong4,to use; to put to use,0
 2269,4-1092,杂志,za2 zhi4,"magazine; CL:本[ben3],份[fen4],期[qi1]",0
 2270,5-2270,灾害,zai1 hai4,disastrous damage; scourge; CL:個|个[ge4],0
-2271,1-138,在,zai4,(located) at; (to be) in; to exist; in the middle of doing sth; (indicating an action in progress),0
+2271,1-138,在,zai4,(located) at; (to be) in; to exist; in the middle of doing sth; (indicating an action in progress),1
 2272,2-275,再,zai4,"again; once more; re-; second; another; then (after sth, and not until then)",0
 2273,1-139,再见,zai4 jian4,goodbye; see you again later,0
 2274,5-2274,再三,zai4 san1,over and over again; again and again,0
@@ -2402,7 +2401,7 @@ Order,HSK Level-Order,Word,Pronunciation,Definition,Score
 2389,3-578,种,zhong3,"abbr. for 物種|物种, genus; race; seed; breed; species; strain; kind; type; has guts (i.e. courage); nerve; classifier for types: kind, sort; classifier for languages",0
 2390,5-2390,重,zhong4,heavy; serious,0
 2391,4-1150,重点,zhong4 dian3,emphasis; focal point; priority; key; with the emphasis on; focusing on,0
-2392,5-2392,重量,zhong4 liang4,weight; CL:個|个[ge4],0
+2392,5-2392,重量,zhong4 liang4,weight; CL:個|个[ge4],1
 2393,4-1151,重视,zhong4 shi4,to attach importance to sth; to value,0
 2394,3-579,重要,zhong4 yao4,important; significant; major,0
 2395,5-2395,周到,zhou1 dao5,thoughtful; considerate; attentive; thorough,0
@@ -2443,7 +2442,7 @@ Order,HSK Level-Order,Word,Pronunciation,Definition,Score
 2430,5-2430,状况,zhuang4 kuang4,condition; state; situation; CL:個|个[ge4],0
 2431,5-2431,状态,zhuang4 tai4,state of affairs; state; mode; situation; CL:個|个[ge4],0
 2432,5-2432,追求,zhui1 qiu2,to pursue (a goal etc) stubbornly; to seek after; to woo,0
-2433,2-291,准备,zhun3 bei4,preparation; prepare,0
+2433,2-291,准备,zhun3 bei4,preparation; prepare,1
 2434,4-1170,准确,zhun3 que4,accurate; exact; precise,0
 2435,4-1171,准时,zhun3 shi2,on time; punctual; on schedule,0
 2436,1-146,桌子,zhuo1 zi5,"table; desk; CL:張|张[zhang1],套[tao4]",0
@@ -2500,7 +2499,7 @@ Order,HSK Level-Order,Word,Pronunciation,Definition,Score
 2487,5-2487,遵守,zun1 shou3,to comply with; to abide by; to respect (an agreement),0
 2488,1-148,昨天,zuo2 tian1,yesterday,0
 2489,2-298,左边,zuo3 bian5,left; the left side; to the left of,0
-2490,1-150,坐,zuo4,"to sit; to take a seat; to take (a bus, airplane etc); to bear fruit; surname Zuo",0
+2490,1-150,坐,zuo4,"to sit; to take a seat; to take (a bus, airplane etc); to bear fruit; surname Zuo",1
 2491,1-149,做,zuo4,to do; to make; to produce; to write; to compose; to act as; to engage in; to hold (a party); to be; to become; to function (in some capacity); to serve as; to be used for; to form (a bond or relationship); to pretend; to feign; to act a part; to put on appearance,0
 2492,4-1195,做生意,zuo4 sheng1 yi4,to do business,0
 2493,4-1196,座,zuo4,"seat; base; stand; CL:個|个[ge4]; classifier for buildings, mountains and similar immovable objects",0
@@ -2511,3 +2510,4 @@ Order,HSK Level-Order,Word,Pronunciation,Definition,Score
 2498,3-599,作业,zuo4 ye4,school assignment; homework; work; task; operation; to operate; CL:個|个[ge4],0
 2499,3-600,作用,zuo4 yong4,"to act on; to affect; action; function; activity; impact; result; effect; purpose; intent; to play a role; corresponds to English -ity, -ism, -ization; CL:個|个[ge4]",0
 2500,4-1200,作者,zuo4 zhe3,author; writer; CL:個|个[ge4],0
+2501,5-839,急忙,ji2 mang2,hastily,0
