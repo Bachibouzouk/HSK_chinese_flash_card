@@ -187,7 +187,7 @@ class HSKGui(QWidget):
 
             # picks a new word and displays only the character
             self.current_word = self.browser.word_picking()
-            self.charLabel.setText(u"%s" % (self.current_word[ASK_WORD]))
+            self.charLabel.setText(unicode("%s" % (self.current_word[ASK_WORD]),"utf8"))
             # update the state of the favorite word box
             self.update_favBox()
 
