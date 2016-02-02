@@ -189,7 +189,7 @@ class HSKGui(QWidget):
 
             # picks a new word and displays only the character
             self.current_word = self.browser.word_picking()
-            self.charLabel.setText(u"%s" % (self.current_word[ASK_WORD]))
+            self.charLabel.setText(unicode("%s" % (self.current_word[ASK_WORD]),"utf8"))
             # update the state of the favorite word box
             self.update_favBox()
 
@@ -199,8 +199,7 @@ class HSKGui(QWidget):
 
         elif self.question_stage == ASK_PRON:
             # displays the prononciation of the character
-            self.prononciationLabel.setText(
-                u"%s" % (self.current_word[ASK_PRON]))
+            self.prononciationLabel.setText(unicode("%s" % (self.current_word[ASK_PRON]),"utf8"))
 
             # prepares the button to display the definition upon next click
             self.browseButton.setText("Show definition")
@@ -208,7 +207,7 @@ class HSKGui(QWidget):
 
         elif self.question_stage == ASK_DEF:
             # displays the definition of the character
-            self.defLabel.setText(u"%s" % (self.current_word[ASK_DEF]))
+            self.defLabel.setText(unicode("%s" % (self.current_word[ASK_DEF]),"utf8"))
 
             # prepares the buttons to ask the users whether they know the
             # character or not
