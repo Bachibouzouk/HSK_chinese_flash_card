@@ -230,7 +230,7 @@ class HSKGui(QWidget):
         if self.question_stage == ASSESS:
             # the user clicked on "Know", so we update the score of the word in
             # the voc list
-            self.current_word[-2] = KNOWN_WORD
+            self.current_word[-1] = KNOWN_WORD
             new_score = self.browser.word_learning(self.current_word)
             self.change_score(*new_score)
 
@@ -362,11 +362,7 @@ class FlashCardBrowser(object):
 
     def word_learning(self, word):
         """this function recieves a word after its interaction with the user and updates its score in the vocabulary list"""
-        print word[0]        
-        print self.voc_list[:, 0] == word[0]        
-        print self.voc_list[self.voc_list[:, 0] == word[0], :]
         self.voc_list[self.voc_list[:, 0] == word[0], :] = word
-        print self.voc_list[self.voc_list[:, 0] == word[0], :]
         return self.calculate_score()
 
     def add_fav_word(self, word):
@@ -396,6 +392,7 @@ class FlashCardBrowser(object):
             self.voc_list[self.voc_list[:, self.index_score] == KNOWN_WORD, :])
 
         total_words_num = known_words_num + unknown_words_num
+	print known_words_num, total_words_num
         return known_words_num, total_words_num
 
 if __name__ == "__main__":
