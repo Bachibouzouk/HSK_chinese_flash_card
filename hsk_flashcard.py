@@ -31,6 +31,7 @@ import sys
 import os
 import numpy as np
 import csv
+import pandas as pd
 
 # This are global variables used by HSKGui
 ASK_WORD = 2
@@ -38,14 +39,14 @@ ASK_PRON = 3
 ASK_DEF = 4
 ASSESS = 5
 
-KNOWN_WORD = '1'
-UNKNOWN_WORD = '0'
+KNOWN_WORD = 1
+UNKNOWN_WORD = 0
 
 SCORE_ID = 'Score'
 FAV_HDR_ID = 'Favorite'
 
-FAV_ID = '1'
-NOT_FAV_ID = '0'
+FAV_ID = 1
+NOT_FAV_ID = 0
 
 
 class HSKGui(QWidget):
@@ -246,7 +247,7 @@ class HSKGui(QWidget):
         if self.question_stage == ASSESS:
             # the user clicked on "Know", so we update the score of the word in
             # the voc list
-            self.current_word[-2] = KNOWN_WORD
+            self.current_word[SCORE_ID] = KNOWN_WORD
             new_score = self.browser.word_learning(self.current_word)
             self.change_score(*new_score)
 
@@ -273,7 +274,14 @@ class HSKGui(QWidget):
     def save_learning(self):
         """prompt the user to save the current session in a file"""
 
-        fname = str(QFileDialog.getSaveFileName(self, 'Save as', './%s'%(os.path.basename(self.browser.fname)), "*.csv"))
+        fname = str(
+            QFileDialog.getSaveFileName(
+                self,
+                'Save as',
+                './%s' % (os.path.basename(self.browser.fname)),
+                "*.csv"
+            )
+        )
         if fname:
             self.browser.save_voc_list(fname)
         else:
@@ -286,9 +294,9 @@ class HSKGui(QWidget):
             if self.current_word is None:
                 # the current word is None (very first iteration)
                 self.favBox.setChecked(False)
-            elif len(self.current_word) == 7:
+            elif FAV_HDR_ID in self.current_word:
                 # there is a fav column, so we update the favBox
-                if self.current_word[6] == FAV_ID:
+                if self.current_word[FAV_HDR_ID] == FAV_ID:
                     self.favBox.setChecked(True)
                 else:
                     self.favBox.setChecked(False)
@@ -297,21 +305,15 @@ class HSKGui(QWidget):
                 self.favBox.setChecked(False)
         else:
             # there is a word in the argument
-            if not len(self.current_word) == 7:
-                word = np.append(word, 0)
 
             if fav_state:
-                word[6] = FAV_ID
+                word.loc[FAV_HDR_ID] = FAV_ID
             else:
-                word[6] = NOT_FAV_ID
+                word.loc[FAV_HDR_ID] = NOT_FAV_ID
 
-            if len(self.current_word) == 7:
-                #               #there is a fav column
-                self.browser.add_fav_word(word)
+            #there is a fav column
+            self.browser.add_fav_word(word)
 
-            else:
-                # there is no fav column
-                self.browser.add_fav_word(word)
 
 
 class FlashCardBrowser(object):
@@ -323,10 +325,9 @@ class FlashCardBrowser(object):
         else:
             self.fname = 'HSK_Level_5.txt'
 
-        self.voc_list = self.import_voc_list(self.fname)
-
+        self.voc_list = None
+        self.import_voc_list(self.fname)
         self.index_score = 0
-
 
     def get_fname(self):
         """formatsthe fname for display"""
@@ -338,81 +339,62 @@ class FlashCardBrowser(object):
     def import_voc_list(self, fname='HSK_Level_5.txt'):
         """ 
         this function loads the vocabulary list from a given csv file
-        it expects the following format from the file : 'Order','HSK Level-Order','Word','Pronunciation','Definition','score'
+        it expects the following format from the file :
+        'Order','HSK Level-Order','Word','Pronunciation','Definition','score'
         It will return an array of array ignoring the first 2 columns    
         """
-        hsk_data = []
-        with open(fname, 'r') as csvfile:
-            reader = csv.reader(csvfile, delimiter=',')
-            for row in reader:
-                hsk_data.append(row)
 
-        # finds the column number corresponding to the score
-        self.index_score = hsk_data[0].index(SCORE_ID)
+        hsk_data = pd.read_csv(fname)
 
-        return np.array(hsk_data)
+        for opt in [SCORE_ID, FAV_HDR_ID]:
+            if opt not in hsk_data.columns:
+                print('Create {} column as it didn\'t exist'.format(opt))
+                hsk_data[opt] = 0
+
+        self.voc_list = hsk_data
 
     def save_voc_list(self, fname=None):
         """ this function save the hsk data from a session back to a csv file"""
         if fname is None:
             fname = self.fname
 
-        with open(fname, "wb") as csvfile:
-            writer = csv.writer(csvfile)
-            writer.writerows(self.voc_list)
+        self.voc_list.to_csv(fname)
 
     def word_picking(self):
-        """ this function chooses a word with a score of 0 from the word list"""
+        """this function chooses a word with a score of 0 from the word list"""
 
         # choose only from the words which have a 0 in the score column (i.e.
         # unknowns)
-        unknown_words = self.voc_list[self.voc_list[
-            :, self.index_score] == UNKNOWN_WORD, :]
+        unknown_words = self.voc_list.loc[self.voc_list[SCORE_ID] == UNKNOWN_WORD]
         # pick a random integer between 0 and the size of the unknows list
-        index_picked = np.random.random_integers(0, len(unknown_words) - 1)
+        index_picked = np.random.randint(0, len(unknown_words) - 1)
 
-        # find the index of the word inside the whole list
-        index_picked = unknown_words[index_picked, 0]
-
-        # extract the word from the whole list
-        word = np.squeeze(
-            self.voc_list[self.voc_list[:, 0] == index_picked, :])
-        return word
+        # extract the word from the list
+        return unknown_words.iloc[index_picked]
 
     def word_learning(self, word):
-        """this function recieves a word after its interaction with the user and updates its score in the vocabulary list"""
-        print(word[0])
-        print(self.voc_list[:, 0] == word[0])
-        print(self.voc_list[self.voc_list[:, 0] == word[0], :])
-        self.voc_list[self.voc_list[:, 0] == word[0], :] = word
-        print(self.voc_list[self.voc_list[:, 0] == word[0], :])
+        """this function recieves a word after its interaction with the user and updates
+        its score in the vocabulary list"""
+        self.voc_list.loc[self.voc_list.Order == word.Order, SCORE_ID] = word[SCORE_ID]
         return self.calculate_score()
 
     def add_fav_word(self, word):
         """flag a word as favorite"""
-        if np.size(self.voc_list[self.voc_list[:, 0] == word[0], :]) == 6:
-            # if the favorite flag option didn't exist we create it with the
-            # flag to 0 automatically
-            self.voc_list = np.hstack([self.voc_list, np.zeros(
-                (len(self.voc_list[:, 0]), 1), dtype=np.int8)])
-            # add the header name for this new column
-            self.voc_list[0, -1] = FAV_HDR_ID
-
-        # update the word
-        self.voc_list[self.voc_list[:, 0] == word[0], :] = word
+        self.voc_list.loc[self.voc_list.Order == word.Order, FAV_HDR_ID] = FAV_ID
 
     def reset_word_learned(self):
         """this function sets back all the scores to UNKNOWN_WORD"""
-        for i in range(len(self.voc_list) - 1):
-            self.voc_list[i + 1, self.index_score] = UNKNOWN_WORD
+        self.voc_list[SCORE_ID] = UNKNOWN_WORD
 
     def calculate_score(self):
         """this function computes the total score and number of known words"""
 
         unknown_words_num = len(
-            self.voc_list[self.voc_list[:, self.index_score] == UNKNOWN_WORD, :])
+            self.voc_list.loc[self.voc_list[SCORE_ID] == UNKNOWN_WORD]
+        )
         known_words_num = len(
-            self.voc_list[self.voc_list[:, self.index_score] == KNOWN_WORD, :])
+            self.voc_list.loc[self.voc_list[SCORE_ID] == KNOWN_WORD]
+        )
 
         total_words_num = known_words_num + unknown_words_num
         return known_words_num, total_words_num
@@ -424,3 +406,4 @@ if __name__ == "__main__":
     ex = HSKGui(fname="HSK_Level_5_PF.csv")
     ex.show()
     sys.exit(app.exec_())
+
