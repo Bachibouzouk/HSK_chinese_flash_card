@@ -3,14 +3,30 @@
 Created on Sat Jan 23 12:27:18 2016
 
 IMPROVEMENT :
-Then give the user possibilities to browse HSK * words only (without including all the lower HSK words)
+Then give the user possibilities to browse HSK * words only
+(without including all the lower HSK words)
 Or browse only the liked words
 
 @author: pfduc
 """
 
-from PyQt4.QtGui import QFont, QWidget, QCheckBox, QVBoxLayout, QHBoxLayout, QLabel, QApplication, QPushButton, QMessageBox, QFileDialog, QInputDialog
-from PyQt4.QtCore import SIGNAL
+from PyQt5.QtWidgets import (
+    QWidget,
+    QCheckBox,
+    QVBoxLayout,
+    QHBoxLayout,
+    QLabel,
+    QApplication,
+    QPushButton,
+    QMessageBox,
+    QFileDialog,
+    QInputDialog
+)
+
+from PyQt5.QtGui import (
+    QFont,
+)
+
 import sys
 import os
 import numpy as np
@@ -41,6 +57,8 @@ class HSKGui(QWidget):
     def __init__(self, parent=None, fname=None):
 
         super(HSKGui, self).__init__(parent)
+
+        self.browser = None
 
         # main layout of the form is the verticallayout
         self.verticalLayout = QVBoxLayout()
@@ -103,10 +121,8 @@ class HSKGui(QWidget):
         self.setLayout(self.verticalLayout)
 
         # link the click of the buttons to the execution of a method
-        self.connect(self.browseButton, SIGNAL(
-            'clicked()'), self.on_browseButton_clicked)
-        self.connect(self.assessButton, SIGNAL(
-            'clicked()'), self.on_assessButton_clicked)
+        self.browseButton.clicked.connect(self.on_browseButton_clicked)
+        self.assessButton.clicked.connect(self.on_assessButton_clicked)
 
         self.load_voc_list(fname)
 
@@ -125,11 +141,11 @@ class HSKGui(QWidget):
 
     def load_voc_list(self, fname=None):
         """loads a vocabulary list from a user choosen location"""
-        if fname == None:
+        if fname is None:
             fname = str(QFileDialog.getOpenFileName(
                 self, 'Load vocabulary list as', './'))
 
-        if not fname == None:
+        if fname is not None:
             # a class responsible to browswe through a list of vocabulary
             self.browser = FlashCardBrowser(fname)
             # update the score
@@ -156,7 +172,7 @@ class HSKGui(QWidget):
     def increment_numword(self):
         """increment the number of words browsed"""
         self.numword = self.numword + 1
-        self.numwordLabel.setText("#Words : %i" % (self.numword))
+        self.numwordLabel.setText("#Words : %i" % self.numword)
 
     def closeEvent(self, event):
         """when exiting the widget we are prompt with this question"""
@@ -189,7 +205,7 @@ class HSKGui(QWidget):
 
             # picks a new word and displays only the character
             self.current_word = self.browser.word_picking()
-            self.charLabel.setText(unicode("%s" % (self.current_word[ASK_WORD]),"utf8"))
+            self.charLabel.setText("%s" % self.current_word[ASK_WORD])
             # update the state of the favorite word box
             self.update_favBox()
 
@@ -199,7 +215,7 @@ class HSKGui(QWidget):
 
         elif self.question_stage == ASK_PRON:
             # displays the prononciation of the character
-            self.prononciationLabel.setText(unicode("%s" % (self.current_word[ASK_PRON]),"utf8"))
+            self.prononciationLabel.setText("%s" % self.current_word[ASK_PRON])
 
             # prepares the button to display the definition upon next click
             self.browseButton.setText("Show definition")
@@ -207,7 +223,7 @@ class HSKGui(QWidget):
 
         elif self.question_stage == ASK_DEF:
             # displays the definition of the character
-            self.defLabel.setText(unicode("%s" % (self.current_word[ASK_DEF]),"utf8"))
+            self.defLabel.setText("%s" % self.current_word[ASK_DEF])
 
             # prepares the buttons to ask the users whether they know the
             # character or not
@@ -242,8 +258,8 @@ class HSKGui(QWidget):
             self.increment_numword()
         else:
             # this button is then used as an option menu trigger
-            item, ok = QInputDialog.getItem(self, self.trUtf8("Options"),
-                                            self.trUtf8("Choose an option"),
+            item, ok = QInputDialog.getItem(self, "Options",
+                                            "Choose an option",
                                             self.option_list.keys())
 
             if ok:
@@ -265,9 +281,9 @@ class HSKGui(QWidget):
 
     def update_favBox(self, word=None, fav_state=None):
         """update the state of the checkbox"""
-        if word == None:
+        if word is None:
             # there is no word for which to update status
-            if self.current_word == None:
+            if self.current_word is None:
                 # the current word is None (very first iteration)
                 self.favBox.setChecked(False)
             elif len(self.current_word) == 7:
@@ -302,12 +318,15 @@ class FlashCardBrowser(object):
     """this class takes care of managing the flash cards and browsing through them"""
 
     def __init__(self, fname=None):
-        if not fname == None:
+        if not fname is None:
             self.fname = fname
         else:
             self.fname = 'HSK_Level_5.txt'
 
         self.voc_list = self.import_voc_list(self.fname)
+
+        self.index_score = 0
+
 
     def get_fname(self):
         """formatsthe fname for display"""
@@ -323,7 +342,7 @@ class FlashCardBrowser(object):
         It will return an array of array ignoring the first 2 columns    
         """
         hsk_data = []
-        with open(fname, 'rb') as csvfile:
+        with open(fname, 'r') as csvfile:
             reader = csv.reader(csvfile, delimiter=',')
             for row in reader:
                 hsk_data.append(row)
@@ -335,7 +354,7 @@ class FlashCardBrowser(object):
 
     def save_voc_list(self, fname=None):
         """ this function save the hsk data from a session back to a csv file"""
-        if fname == None:
+        if fname is None:
             fname = self.fname
 
         with open(fname, "wb") as csvfile:
@@ -362,11 +381,11 @@ class FlashCardBrowser(object):
 
     def word_learning(self, word):
         """this function recieves a word after its interaction with the user and updates its score in the vocabulary list"""
-        print word[0]        
-        print self.voc_list[:, 0] == word[0]        
-        print self.voc_list[self.voc_list[:, 0] == word[0], :]
+        print(word[0])
+        print(self.voc_list[:, 0] == word[0])
+        print(self.voc_list[self.voc_list[:, 0] == word[0], :])
         self.voc_list[self.voc_list[:, 0] == word[0], :] = word
-        print self.voc_list[self.voc_list[:, 0] == word[0], :]
+        print(self.voc_list[self.voc_list[:, 0] == word[0], :])
         return self.calculate_score()
 
     def add_fav_word(self, word):
@@ -397,6 +416,7 @@ class FlashCardBrowser(object):
 
         total_words_num = known_words_num + unknown_words_num
         return known_words_num, total_words_num
+
 
 if __name__ == "__main__":
 
