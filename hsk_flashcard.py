@@ -143,9 +143,15 @@ class HSKGui(QWidget):
     def load_voc_list(self, fname=None):
         """loads a vocabulary list from a user choosen location"""
         if fname is None:
-            fname = str(QFileDialog.getOpenFileName(
-                self, 'Load vocabulary list as', './'))
-
+            options = QFileDialog.Options()
+            options |= QFileDialog.DontUseNativeDialog
+            fname, _ = QFileDialog.getOpenFileName(
+                self,
+                "QFileDialog.getOpenFileName()",
+                "Load vocabulary list as",
+                "Csv Fils (*.csv)",
+                options=options
+            )
         if fname is not None:
             # a class responsible to browswe through a list of vocabulary
             self.browser = FlashCardBrowser(fname)
@@ -274,13 +280,13 @@ class HSKGui(QWidget):
     def save_learning(self):
         """prompt the user to save the current session in a file"""
 
-        fname = str(
-            QFileDialog.getSaveFileName(
-                self,
-                'Save as',
-                './%s' % (os.path.basename(self.browser.fname)),
-                "*.csv"
-            )
+        options = QFileDialog.Options()
+        options |= QFileDialog.DontUseNativeDialog
+        fname, _ = QFileDialog.getSaveFileName(
+            self, "QFileDialog.getSaveFileName()",
+            "Save as",
+            "Csv Files (*.csv)",
+            options=options
         )
         if fname:
             self.browser.save_voc_list(fname)
